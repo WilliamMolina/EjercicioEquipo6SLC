@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "SaldosYMovimientos"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+adapter:
+  restconsumer:
+    url: "https://eq6-transactions.getsandbox.com/v1/operations/consult-services/retrieve-transaction"

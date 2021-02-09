@@ -1,4 +1,4 @@
-package co.com.bancolombia.api;
+package co.com.ejerciciopractico.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,4 +17,4 @@ public RouterFunction<ServerResponse> routerFunction(Handler handler) {
     .andRoute(POST("/api/usecase/otherpath"), handler::listenPOSTUseCase).and(route(GET("/api/otherusercase/path"), handler::listenGETOtherUseCase));
 
     }
-    }
+}

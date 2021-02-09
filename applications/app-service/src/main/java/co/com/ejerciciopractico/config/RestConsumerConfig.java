@@ -1,5 +1,6 @@
 package co.com.ejerciciopractico.config;
 
+import co.com.ejerciciopractico.usecase.saldosymovimientos.SaldosYMovimientosUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,11 @@ public class RestConsumerConfig {
             .baseUrl(url)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build();
+    }
+
+    @Bean
+    public SaldosYMovimientosUseCase getUseCase(){
+        return new SaldosYMovimientosUseCase();
     }
 
 }

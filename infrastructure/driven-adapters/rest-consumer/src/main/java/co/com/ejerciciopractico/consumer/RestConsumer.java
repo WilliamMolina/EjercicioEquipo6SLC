@@ -1,5 +1,7 @@
 package co.com.ejerciciopractico.consumer;
 
+import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
+import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.SaldosResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -7,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class RestConsumer // implements Gateway from domain
+public class RestConsumer implements SaldosGateway// implements Gateway from domain
 {
 
     private final WebClient client;
@@ -37,5 +39,12 @@ public class RestConsumer // implements Gateway from domain
             .body(Mono.just(request), ObjectRequest.class)
             .retrieve()
             .bodyToMono(ObjectResponse.class);
+    }
+
+    @Override
+    public Mono<SaldosResponse> getSaldos() {
+
+        return client.post().retrieve().bodyToMono(SaldosResponse.class);
+
     }
 }

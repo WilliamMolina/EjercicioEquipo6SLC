@@ -1,5 +1,6 @@
 package co.com.ejerciciopractico.config;
 
+import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
 import co.com.ejerciciopractico.usecase.saldosymovimientos.SaldosYMovimientosUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +23,10 @@ public class RestConsumerConfig {
     }
 
     @Bean
-    public SaldosYMovimientosUseCase getUseCase(){
-        return new SaldosYMovimientosUseCase();
+    public SaldosYMovimientosUseCase getUseCase(SaldosGateway saldos)
+    {
+        return new SaldosYMovimientosUseCase(saldos);
+
     }
 
 }

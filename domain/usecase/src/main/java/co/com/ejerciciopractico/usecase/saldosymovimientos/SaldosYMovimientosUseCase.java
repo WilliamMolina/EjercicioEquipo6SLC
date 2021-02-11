@@ -1,6 +1,7 @@
 package co.com.ejerciciopractico.usecase.saldosymovimientos;
 
 import co.com.ejerciciopractico.model.saldosymovimientos.*;
+import co.com.ejerciciopractico.model.saldosymovimientos.gateways.MovimientosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.Balances;
 import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.SaldosResponse;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 public class SaldosYMovimientosUseCase {
     /* Lógica */
     private final SaldosGateway saldos;
+    private  final MovimientosGateway movimientos;
 
     public Mono<SaldosYMovimientosResponse> getSaldosYMovimientos(){
 

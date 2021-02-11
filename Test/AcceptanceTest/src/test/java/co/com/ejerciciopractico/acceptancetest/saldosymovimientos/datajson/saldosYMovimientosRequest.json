@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "pagination": {
+        "size": 30,
+        "key": 1
+      },
+      "account": {
+        "type": "CUENTA_DE_AHORRO",
+        "number": "21476523490"
+      },
+      "transaction": {
+        "startDate": "2021-01-01",
+        "endDate": "2021-01-30",
+        "minAmount": null,
+        "maxAmount": null,
+        "type": "DEBITO",
+        "checkNumber": null,
+        "group": null,
+        "description": null
+      },
+      "office": {
+        "code": "2005678",
+        "name": "2005678"
+      }
+    }
+  ]
+}

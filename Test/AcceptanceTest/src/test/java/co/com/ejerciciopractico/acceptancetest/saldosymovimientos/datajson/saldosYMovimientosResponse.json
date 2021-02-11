@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "_responseSize": 27,
+    "_flagMoreRecords": false,
+    "_messageId": "c4e6bd04-5149-11e7-b114-b2f933d5fe66",
+    "_requestTimeStamp": "2017-01-24T05:00:00.000Z",
+    "_applicationId": "acxff62e-6f12-42de-9012-3e7304418abd",
+    "_version": "3.0"
+  },
+  "data": [
+    {
+      "account": {
+        "balance": {
+          "available": "25,000,000.0000",
+          "availableOverdraftBalance": 0,
+          "overdraftValue": null,
+          "availableOverdraftQuota": null,
+          "cash": "25,000,000.0000",
+          "unavailableClearing": 0,
+          "receivable": "1,500,000.0000",
+          "blocked": 0,
+          "unavailableStartDayClearingStartDay": 0,
+          "cashStartDay": "18,000,000.0000",
+          "pockets": "5,000,000.000",
+          "remittanceQuota": 0,
+          "agreedRemittanceQuota": 0,
+          "remittanceQuotaUsage": 0,
+          "normalInterest": null,
+          "suspensionInterest": null
+        }
+      },
+      "transaction": [
+        {
+          "id": "#string?_.length>=1 && _.length<=6",
+          "postedDate": "2021-01-04",
+          "description": "Abono preautorizado donación",
+          "amount": 12400,
+          "type": "DEBITO",
+          "reference1": "",
+          "reference2": "",
+          "reference3": "",
+          "checkNumber": ""
+        }
+      ],
+      "office": {
+        "code": "2005678",
+        "name": "2005678"
+      },
+      "relatedTransferAccount": {
+        "type": "CUENTA_DE_AHORRO",
+        "number": "21476523490"
+      },
+      "customer": {
+        "name": "Pedro Perez"
+      }
+    }
+  ],
+  "links": {
+    "self": "string"
+  }
+}

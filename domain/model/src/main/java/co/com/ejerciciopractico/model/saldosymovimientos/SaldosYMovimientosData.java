@@ -17,6 +17,6 @@ public class SaldosYMovimientosData {
     private Customer customer;
     private Office office;
     private RelatedTransferAccount relatedTransferAccount;
-    private List<Transaction> transaction;
+    private List<TransactionSaldosYMovimientos> transaction;
 
 }

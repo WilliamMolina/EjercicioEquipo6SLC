@@ -1,6 +1,7 @@
 
 package co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response;
 
+import co.com.ejerciciopractico.model.saldosymovimientos.Links;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,50 +1,48 @@
 package co.com.ejerciciopractico.consumer;
 
+import co.com.ejerciciopractico.model.saldosymovimientos.SaldosYMovimientosRequest;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
+import co.com.ejerciciopractico.model.saldosymovimientos.saldos.Account;
+import co.com.ejerciciopractico.model.saldosymovimientos.saldos.SaldosRequest;
+import co.com.ejerciciopractico.model.saldosymovimientos.saldos.SaldosRequestData;
 import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.SaldosResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
 public class RestConsumer implements SaldosGateway// implements Gateway from domain
 {
 
-    private final WebClient client;
-
-
+    @Autowired
+    @Qualifier("saldos")
+    private WebClient client;
     // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
 
-    public Mono<ObjectResponse> testGet() {
-
-        return client
-            .get()
-            .retrieve()
-            .bodyToMono(ObjectResponse.class);
-
-    }
-
-    public Mono<ObjectResponse> testPost() {
-
-        ObjectRequest request = ObjectRequest.builder()
-            .val1("exampleval1")
-            .val2("exampleval2")
-            .build();
-
-        return client
-            .post()
-            .body(Mono.just(request), ObjectRequest.class)
-            .retrieve()
-            .bodyToMono(ObjectResponse.class);
-    }
 
     @Override
-    public Mono<SaldosResponse> getSaldos() {
+    public Mono<SaldosResponse> getSaldos(SaldosYMovimientosRequest request) {
 
-        return client.post().retrieve().bodyToMono(SaldosResponse.class);
+        SaldosRequest saldosRequest = SaldosRequest.builder()
+                .data(Arrays.asList(SaldosRequestData
+                        .builder()
+                        .account(Account
+                                .builder()
+                                .number(request.getData().get(0).getAccount().getNumber())
+                                .type(request.getData().get(0).getAccount().getType())
+                                .build())
+                        .build()))
+                .build();
+
+        return client.post().body(Mono.just(saldosRequest), SaldosRequest.class).retrieve().bodyToMono(SaldosResponse.class);
 
     }
 }

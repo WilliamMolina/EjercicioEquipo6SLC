@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("unused")
-public class Transaction {
+public class TransactionSaldosYMovimientos {
 
     private Long amount;
     private String checkNumber;

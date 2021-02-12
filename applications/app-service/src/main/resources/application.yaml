@@ -12,5 +12,7 @@ spring:
   profiles:
     include: null
 adapter:
-  restconsumer:
+  saldos:
     url: "https://eq6-transaction.getsandbox.com:443/balance"
+  movimientos:
+    url: "https://eq6-transactions.getsandbox.com/v1/operations/consult-services/retrieve-transaction"

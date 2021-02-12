@@ -1,17 +1,17 @@
-
 package co.com.ejerciciopractico.model.saldosymovimientos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Account {
+@NoArgsConstructor
+@AllArgsConstructor
+public class SaldosYMovimientosRequest {
 
-    private Balance balance;
-
+    private List<SaldosYMovimientosDataRequest> data;
 }

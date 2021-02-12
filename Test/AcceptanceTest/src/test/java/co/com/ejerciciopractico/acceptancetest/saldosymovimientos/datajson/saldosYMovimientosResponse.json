@@ -1,57 +1,57 @@
 {
   "meta": {
-    "_responseSize": 27,
-    "_flagMoreRecords": false,
-    "_messageId": "c4e6bd04-5149-11e7-b114-b2f933d5fe66",
-    "_requestTimeStamp": "2017-01-24T05:00:00.000Z",
-    "_applicationId": "acxff62e-6f12-42de-9012-3e7304418abd",
-    "_version": "3.0"
+    "_responseSize": "#number? _.length>=1 && _.length<=2",
+    "_flagMoreRecords": "#boolean",
+    "_messageId": "#string",
+    "_requestTimeStamp": "#string",
+    "_applicationId": "string",
+    "_version": "#string"
   },
   "data": [
     {
       "account": {
         "balance": {
-          "available": "25,000,000.0000",
-          "availableOverdraftBalance": 0,
-          "overdraftValue": null,
-          "availableOverdraftQuota": null,
-          "cash": "25,000,000.0000",
-          "unavailableClearing": 0,
-          "receivable": "1,500,000.0000",
-          "blocked": 0,
-          "unavailableStartDayClearingStartDay": 0,
-          "cashStartDay": "18,000,000.0000",
-          "pockets": "5,000,000.000",
-          "remittanceQuota": 0,
-          "agreedRemittanceQuota": 0,
-          "remittanceQuotaUsage": 0,
-          "normalInterest": null,
-          "suspensionInterest": null
+          "available": "#number? _.length>=1 && _.length<=16",
+          "availableOverdraftBalance": "#number? _.length>=1 && _.length<=16",
+          "overdraftValue": "#number? _.length>=1 && _.length<=16",
+          "availableOverdraftQuota": "#number? _.length>=1 && _.length<=16",
+          "cash": "#number? _.length>=1 && _.length<=16",
+          "unavailableClearing": "#number? _.length>=1 && _.length<=16",
+          "receivable": "#number? _.length>=1 && _.length<=16",
+          "blocked": "#number? _.length>=1 && _.length<=16",
+          "unavailableStartDayClearingStartDay": "#number? _.length>=1 && _.length<=16",
+          "cashStartDay": "#number? _.length>=1 && _.length<=16",
+          "pockets": "#number? _.length>=1 && _.length<=16",
+          "remittanceQuota": "#number? _.length>=1 && _.length<=16",
+          "agreedRemittanceQuota": "#number? _.length>=1 && _.length<=16",
+          "remittanceQuotaUsage": "#number? _.length>=1 && _.length<=16",
+          "normalInterest": "#number? _.length>=1 && _.length<=16",
+          "suspensionInterest": "#number? _.length>=1 && _.length<=16"
         }
       },
       "transaction": [
         {
-          "id": "#string?_.length>=1 && _.length<=6",
-          "postedDate": "2021-01-04",
-          "description": "Abono preautorizado donación",
-          "amount": 12400,
-          "type": "DEBITO",
-          "reference1": "",
-          "reference2": "",
-          "reference3": "",
-          "checkNumber": ""
+          "id": "#string? _.length>=1 && _.length<=6",
+          "postedDate": "#string",
+          "description": "#string? _.length>=1 && _.length<=50",
+          "amount": "#number? _.length>=1 && _.length<=16",
+          "type": "#string",
+          "reference1": "string? _.length>=0 && _.length<=50",
+          "reference2": "string? _.length>=0 && _.length<=50",
+          "reference3": "string? _.length>=0 && _.length<=50",
+          "checkNumber": "string? _.length>=0 && _.length<=16"
         }
       ],
       "office": {
-        "code": "2005678",
-        "name": "2005678"
+        "code": "string? _.length>=1 && _.length<=8",
+        "name": "string? _.length>=1 && _.length<=50"
       },
       "relatedTransferAccount": {
-        "type": "CUENTA_DE_AHORRO",
-        "number": "21476523490"
+        "type": "#string",
+        "number": "#string? _.length>=1 && _.length<=16"
       },
       "customer": {
-        "name": "Pedro Perez"
+        "name": "#string? _.length>=1 && _.length<=10"
       }
     }
   ],

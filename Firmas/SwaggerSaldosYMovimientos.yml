@@ -1,0 +1,677 @@
+---
+openapi: 3.0.0
+info:
+  title: Movements and balances 
+  description: Servicio encargado de devolver los movimientos de cuentas de depositos.
+
+
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/leidygraciano1701/Movements/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  # --------------------------------
+  # Consulta saldos y Movimientos
+  # --------------------------------
+  /Account:
+    post:
+      security:
+         - clientSecret: []
+           clientId: []
+      tags:
+      - consultas
+      summary: Deposit Movements and balances
+      operationId: "1756"
+      description: "Capacidad que permite realizar la consulta de los movimientos y los saldos de cuentas de depositos en un rango dado"
+      parameters:
+        - in: header
+          name: Transaction-Tracker
+          schema:
+            type: string
+            format: uuid
+            example: "8348c30c-1296-4882-84b8-d7306205ce26"
+          description: "ID para trazabilidad de la transacción ante logs. Debe ser proporcionado por el front. debe ser único por transacción."
+          required: true
+        - in: header
+          name: Session-Tracker
+          schema:
+            type: string
+            format: uuid
+            example: "15980943-5fcd-4423-a948-b015452d7479"
+          description: "ID para trazabilidad de la sesión. Debe ser proporcionado por el front. Se debe enviar el correspondiente a la sesion de usuario activa."
+          required: true
+        - in: header
+          name: "Channel"
+          schema:
+            type: string
+            example: "SVP"
+          description: "Identificador del canal que esta usando el servicio."
+          required: true
+        - in: header
+          name: "Date"
+          schema:
+            type: string
+            format: utf-8 
+            example: "2019/08/23"
+          description: "Información de la fecha actual del front, en la que se envió la petición al servicio."
+          required: true
+        - in: header
+          name: "Date-time"
+          schema:
+            type: string
+            format: utf-8
+            example: "15:59:00"
+          description: "Información de la hora actual del front, en la que se envió la petición al servicio en formato 24h"
+          required: true
+        - in: header
+          name: "Ip"
+          schema:
+            type: string
+            example: "192.168.164.25"
+          description: "Ip del dispositivo en el cual se generó la petición."
+          required: true
+        - in: header
+          name: "ClientID"
+          schema:
+            type: string
+            example: "10095928"
+          description: "Documento de identificación del cliente que realiza la petición."
+          required: true
+        - in: header
+          name: "ClientType"
+          schema:
+            type: string
+            example: "CC"
+          description: "Tipo de Documento de identificación del cliente que realiza la petición."
+          required: true
+        - in: header
+          name: "Authorization"
+          schema:
+            type: string
+            format: utf-8
+            example: "1eyJhbGciOiJub251ln0.eyJpc3MiOiJqb2UiLAOkiC      .4MTk2=DASDQo"
+          description: "Token JWT/JWS con la informacion de session-Tracker, ClientId, ClientType."
+          required: true
+        - in: header
+          name: "Content-Type"
+          schema:
+             type: string
+             example: "application/json"
+          description: "Cabecera para indicar que recibe un Json."
+          required: true
+          
+      requestBody:
+        required: true
+        content:
+          application/vnd.bancolombia.v2+json:
+            schema:
+              $ref: "#/components/schemas/reqRetrieveBalances"
+        description: "Consulta de saldo de cuentas de depositos"
+
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/resRetrieveBalances'
+        "400":
+          description: bad input parameter
+          
+components:
+    # --------------------------------
+    # SecuritySchemes
+    # --------------------------------  
+  securitySchemes:
+    clientSecret:
+      type: "apiKey"
+      description: ""
+      in: "header"
+      name: "X-IBM-Client-Secret"
+    clientId:
+      type: "apiKey"
+      description: ""
+      in: "header"
+      name: "X-IBM-Client-Id"
+      
+    # --------------------------------
+    # Schema Request
+    # --------------------------------  
+  schemas:
+    reqRetrieveBalances:
+      type: "object"
+      required:
+      - "data"
+      
+      properties:
+         data:
+          $ref: "#/components/schemas/data"
+                
+    # --------------------------------
+    # Schema Data
+    # --------------------------------        
+    data:
+      type: "array"
+      items: 
+        required:
+        - "pagination"
+        - "account"
+        - "transaction"
+        - "office"
+        properties:
+          pagination:
+            $ref: "#/components/schemas/pagination"
+          account:
+            $ref: "#/components/schemas/account"
+          transaction:
+            $ref: "#/components/schemas/transaction"
+          office:
+            $ref: "#/components/schemas/office"
+    # --------------------------------
+    # Schema pagination
+    # --------------------------------        
+    pagination:
+      type: "object"
+      description: "Datos de paginación"
+      required:
+      - "size"
+      - "key"
+      properties:
+        size:
+          type: "number"
+          minLength: 1
+          maxLength: 2
+          description: "Cantidad de registros por página. min=1 y max=30"
+          example: 30
+        key:
+          type: "number"
+          minLength: 1
+          maxLength: 3
+          description: "Número de la página."
+          example: 1
+          
+    # --------------------------------
+    # Schema account
+    # --------------------------------        
+    account:
+      type: "object"
+      description: "Información de la cuenta a la cual se le desean consultar los saldo."
+      required:
+      - "type"
+      - "number"
+      properties:
+        type:
+          type: "string"
+          description: "Tipo de cuenta a la cual se le desean consultar los saldos"
+          example: "CUENTA_DE_AHORRO"
+        number:
+          type: "string"
+          minLength: 1
+          maxLength: 16
+          description: "Número de la cuenta a la cual se le desean consultar los saldos."
+          example: 21476523490
+    
+    # --------------------------------
+    # Schema transaction
+    # -------------------------------- 
+    transaction:
+      type: "object"
+      description: "Información del movimiento a consultar."
+      required:
+      - "startDate"
+      - "endDate"
+      properties:
+        startDate:
+          type: "string"
+          format: "date"
+          description: "Fecha a partir de la cual se desean consultar los movimientos de la cuenta. ISO 8601"
+          example: "2021-01-01"
+        endDate:
+          type: "string"
+          format: "date"
+          description: "Fecha hasta la cual se desean consultar los movimientos de la cuenta. ISO 8601"
+          example: "2021-01-30"
+        minAmount:
+          type: "number"
+          format: "float"
+          description: "Valor a partir del cual se desean consultar los movimientos de la cuenta."
+          minLength: 1
+          maxLength: 16
+          example: null
+        maxAmount:
+          type: "number"
+          format: "float"
+          description: "Valor hasta el cual se desean consultar los movimientos de la cuenta."
+          minLength: 1
+          maxLength: 16
+          example: null
+        type:
+          type: "string"
+          description: "Tipo o naturaleza del movimiento por el cual se desea realizar la consulta. DEBITO | CREDITO"
+          example: "DEBITO"
+        checkNumber:
+          type: "string"
+          minLength: 1
+          maxLength: 16
+          description: "Corresponde al número de cheque en caso que el movimiento haya sido con cheque."
+          example: null
+        group:
+          type: "string"
+          minLength: 1
+          maxLength: 2
+          description: "Campo que permite filtrar la información de las transacciones de acuerdo con el grupo al que pertenece cada una de ellas, este grupo permite clasificar las transacciones por producto y tipo de operación. Ejemplo: consignaciones, comisiones, cheque"
+          example: null
+        description:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          description: "Descripción del movimiento."
+          example: null
+     # --------------------------------
+     # Schema office
+     # -------------------------------- 
+    office:
+      type: "object"
+      description: "Información de la sucursal"
+      properties:
+        code:
+          type: "string"
+          minLength: 1
+          maxLength: 8
+          description: "Código de la oficina donde se realizó la transacción o de la oficina dueña de la cuenta a la que pertenece la transacción."
+          example: "2005678"
+        name:
+          type: "string"
+          minLength: 1
+          maxLength: 50
+          description: "nombre de la oficina donde se realizó la transacción o de la oficina dueña de la cuenta a la que pertenece la transacción."
+          example: "2005678"
+
+    # --------------------------------
+    # Schema responses
+    # --------------------------------       
+    resRetrieveBalances:
+      type: "object"
+      required:
+      - "meta"
+      - "data"
+      - "links"
+      
+      properties:
+         meta:
+            $ref: "#/components/schemas/meta"
+         data:
+            $ref: "#/components/schemas/dataRes"
+         links:
+            $ref: "#/components/schemas/links"
+            
+    # --------------------------------
+    # Schema meta
+    # --------------------------------  
+    meta:
+      type: "object"
+      required:
+      - "_responseSize"
+      - "_flagMoreRecords"
+      - "_messageId"
+      - "_version"
+      - "_requestTimeStamp"
+      properties:
+        _responseSize:
+          type: "number"
+          description: "Total de registros."
+          minLength: 1
+          maxLength: 2
+          example: 27
+        _flagMoreRecords:
+          type: "boolean"
+          description: "Indica si existen mas registros en la solicitud"
+          example: false
+        _messageId:
+          type: "string"
+          example: "c4e6bd04-5149-11e7-b114-b2f933d5fe66"
+        _requestTimeStamp:
+          type: "string"
+          format: "date-time"
+          example: "2017-01-24T05:00:00.000Z"
+        _applicationId:
+          type: "string"
+          example: "acxff62e-6f12-42de-9012-3e7304418abd"
+        _version:
+          type: "string"
+          example: "3.0"
+    # --------------------------------
+    # Schema Data response
+    # --------------------------------        
+    dataRes:
+      type: "array"
+      items:
+        required:
+        - "account"
+        - "transaction"
+        - "relatedTransferAccount"
+        properties:
+          account:
+            $ref: "#/components/schemas/resAccount"
+          transaction:
+            $ref: "#/components/schemas/transactionRes"
+          office:
+            $ref: "#/components/schemas/office"
+          relatedTransferAccount:
+            $ref: "#/components/schemas/account"
+          customer:
+            $ref: "#/components/schemas/customer"
+          
+      additionalProperties: false
+          
+    # --------------------------------
+    # Schema Account response
+    # --------------------------------        
+    resAccount:
+      type: "object"
+      required:
+      - "balance"
+      properties:
+        balance:
+          $ref: "#/components/schemas/balance"
+          
+    # --------------------------------
+    # Schema Balance
+    # --------------------------------        
+    balance:
+      type: "object"
+      required: 
+      - "available"
+      - "availableOverdraftBalance"
+      - "overdraftValue"
+      - "availableOverdraftQuota"
+      - "cash"
+      - "unavailableClearing"
+      - "receivable"
+      - "blocked"
+      - "unavailableStartDayClearingStartDay"
+      - "cashStartDay"
+      - "pockets"
+      - "remittanceQuota"
+      - "agreedRemittanceQuota"
+      - "remittanceQuotaUsage"
+      - "normalInterest"
+      - "suspensionInterest"
+      properties:
+        available:
+          type: "number"
+          format: "float"
+          description: "Saldo disponible."
+          minLength: 1
+          maxLength: 16
+          example: 25,000,000.0000
+        availableOverdraftBalance:
+          type: "number"
+          format: "float"
+          description: "Saldo disponible. + Valor cupo de sobregiro."
+          minLength: 1
+          maxLength: 16
+          example: 0
+        overdraftValue:
+          type: "number"
+          format: "float"
+          description: "Valor total del Cupo de Sobregiro."
+          minLength: 1
+          maxLength: 16
+          example: null
+        availableOverdraftQuota:
+          type: "number"
+          format: "float"
+          description: "Valor del Cupo de Sobregiro que se puede utilizar."
+          minLength: 1
+          maxLength: 16
+          example: null
+        cash:
+          type: "number"
+          format: "float"
+          description: "Saldo en efectivo."
+          minLength: 1
+          maxLength: 16
+          example: 25,000,000.0000
+        unavailableClearing:
+          type: "number"
+          format: "float"
+          description: "Saldo en canje."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        receivable:
+          type: "number"
+          format: "float"
+          description: "Saldos en cuentas por cobrar."
+          minLength: 1
+          maxLength: 16
+          example: 1,500,000.0000
+        blocked:
+          type: "number"
+          format: "float"
+          description: "Saldo bloqueado."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        unavailableStartDayClearingStartDay:
+          type: "number"
+          format: "float"
+          description: "Saldo en canje al inicio del día."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        cashStartDay:
+          type: "number"
+          format: "float"
+          description: "Saldo en efectivo al inicio del día."
+          minLength: 1
+          maxLength: 16
+          example: 18,000,000.0000
+        pockets:
+          type: "number"
+          format: "float"
+          description: "Saldo de bolsillos."
+          minLength: 1
+          maxLength: 16
+          example: 5,000,000.000
+        remittanceQuota:
+          type: "number"
+          format: "float"
+          description: "Cupo remesas consignadas."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        agreedRemittanceQuota:
+          type: "number"
+          format: "float"
+          description: "Cupo remesa negociada."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        remittanceQuotaUsage:
+          type: "number"
+          format: "float"
+          description: "Saldo utilizado cupo de la remesa."
+          minLength: 1
+          maxLength: 16
+          example: 0.0000
+        normalInterest:
+          type: "number"
+          format: "float"
+          description: "Intereses de sobregiro que tienen menos de 90 días."
+          minLength: 1
+          maxLength: 16
+          example: null
+        suspensionInterest:
+          type: "number"
+          format: "float"
+          description: "Intereses de sobregiro que tienen mas de 90 días o menos dependiendo de la calificación del cliente."
+          minLength: 1
+          maxLength: 16
+          example: null
+
+    # --------------------------------
+    # Schema transactionRes
+    # --------------------------------      
+    transactionRes:
+      description: "Información del movimiento"
+      type: "array"
+      uniqueItems: true
+      items:
+        type: "object"
+        required:
+        - "id"
+        - "postedDate"
+        - "description"
+        - "amount"
+        - "type"
+        properties:
+          id:
+            type: "string"
+            description: "código de la transacción que identifica el tipo de movimiento en depositos."
+            minLength: 1
+            maxLength: 6
+            example: "8316"
+          postedDate :
+            type: "string"
+            format: "date"
+            description: "Fecha efectiva en la cual se hace la afectación del saldo de la cuenta, puede ser de días anteriores. ISO 8601"
+            example: "2021-01-04"
+          description :
+            type: "string"
+            description: "Descripción o nombre del movimiento."
+            minLength: 1
+            maxLength: 50
+            example: "Abono preautorizado donación"
+          amount :
+            type: "number"
+            format: "float"
+            description: "Valor del movimiento."
+            minLength: 1
+            maxLength: 16
+            example: 12400.0000
+          type:
+            type: "string"
+            description: "Tipo de movimiento, indica si la transacción es de naturaleza débito o crédito. DEBITO | CREDITO"
+            example: "DEBITO"
+          reference1 :
+            type: "string"
+            description: "Texto libre que coloca el consumidor al realizar los movimientos en el cual puede indicar una referencia o valor útil para el cliente. Ejemplo: número de documento de identidad, código de una factura."
+            minLength: 0
+            maxLength: 50
+            example: ""
+          reference2 :
+            type: "string"
+            description: "Texto libre que coloca el consumidor al realizar los movimientos en el cual puede indicar una referencia o valor útil para el cliente. Ejemplo: número de documento de identidad, código de una factura."
+            minLength: 0
+            maxLength: 50
+            example: ""
+          reference3 :
+            type: "string"
+            description: "Texto libre que coloca el consumidor al realizar los movimientos en el cual puede indicar una referencia o valor útil para el cliente. Ejemplo: número de documento de identidad, código de una factura."
+            minLength: 0
+            maxLength: 50
+            example: ""
+          checkNumber :
+            type: "string"
+            description: "Corresponde al número de cheque en caso tal que el movimiento haya sido CHEQUE."
+            minLength: 0
+            maxLength: 16
+            example: ""
+    # --------------------------------
+    # Schema customer
+    # -------------------------------- 
+    customer:
+      type: "object"
+      description: "Información del cliente dueño de la cuenta destino cuando el movimiento fue transferencia."
+      required:
+      - "name"
+      properties:
+        name:
+          type: "string"
+          description: "Nombre completo del cliente titular de la cuenta asociada a la transferencia, aplica para transferencias."
+          minLength: 1
+          maxLength: 100
+          example: "Pedro Perez"
+    
+    # --------------------------------
+    # Schema links
+    # --------------------------------     
+    links:
+      description: "Un objeto de recurso PUEDE contener referencias a otros objetos\
+        \ de recurso"
+      type: "object"
+      properties:
+        self:
+          description: "Un mismo miembro, cuyo valor es una URL para los datos de relació\
+            n"
+          type: "string"
+          format: "uri"
+      additionalProperties: false
+      
+    # --------------------------------
+    # Schema failure
+    # --------------------------------     
+    failure:
+      type: "object"
+      required:
+      - "meta"
+      - "errors"
+      properties:
+        meta:
+          $ref: "#/components/schemas/meta"
+        errors:
+          type: "array"
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/error"
+      additionalProperties: false
+      
+    # --------------------------------
+    # Schema error
+    # --------------------------------   
+    error:
+      type: "object"
+      required:
+      - "code"
+      - "detail"
+      properties:
+        id:
+          description: "Un identificador único para esta aparición particular del problema."
+          type: "string"
+          example: "5f2d287a-3a3f-11e7-a919-92ebcb67fe33"
+        href:
+          description: "Un URI que ** PUEDE ** proporciona más detalles sobre esta ocurrencia\
+            \ particular del problema."
+          type: "string"
+          example: "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+        status:
+          description: "El código de estado HTTP aplicable a este problema, expresado\
+            \ como un valor de cadena."
+          type: "string"
+          example: 404
+        code:
+          description: "Un código de error específico de la aplicación, expresado como\
+            \ un valor de cadena."
+          type: "string"
+          example: "BP404"
+        title:
+          description: "Un breve resumen, legible por el hombre, del problema. ** NO\
+            \ DEBE ** cambiar de ocurrencia a ocurrencia del problema, excepto para\
+            \ propósitos de localización."
+          type: "string"
+          example: "Not Found"
+        detail:
+          description: "Una explicación legible por humanos específica para esta ocurrencia\
+            \ del problema."
+          type: "string"
+          example: "Requested resource could not be found"
+      additionalProperties: false
+      
+      
+      
+      
+      

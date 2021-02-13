@@ -1,41 +1,66 @@
-# Proyecto Base Implementando Clean Architecture
+# Microservicio saldos y movimientos de cuentas
+- Repositorio: https://github.com/WilliamMolina/EjercicioEquipo6SLC
 
-## Antes de Iniciar
+## Descripción del servicio
+El servicio se encarga de consumir las APIs retrieve balance y retrieve transaction (ambas simulados en Sandbox) y exponer al consumidor, por medio de un solo request, la información obtenida de las APIs.
 
-Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por ?ltimo el inicio y configuraci?n de la aplicaci?n.
 
-Lee el art?culo [Clean Architecture ? Aislando los detalles](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+## Definición mensajeria
+Repositorio: https://github.com/WilliamMolina/EjercicioEquipo6SLC/tree/master/Firmas
+Nombre de archivos:
+- SwaggerMovimientos.yml
+- SwaggerSaldos.yml
+- SwaggerSaldosYMovimientos.yml
 
-# Arquitectura
+## Estructura de directorios y paquetería
 
-![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
+- ### Domain
+  El "componente" Domain en el encargado de contener los paquetes
+  model y usecase.
 
-## Domain
+    - Model: Entidades del servicio.
+    - UseCuse: Se define el que se hace en la peticion.
 
-Es el m?dulo m?s interno de la arquitectura, pertenece a la capa del dominio y encapsula la l?gica y reglas del negocio mediante modelos y entidades del dominio.
+- ###Infraestructure
+  Es el encargado de contener los paquetes de driven-adapter y entry-point.
 
-## Usecases
+    - Driven-adapter: Es el paquete que se comunica con todo lo externo al
+      servicio, ejemplos: llamado a las APIs
+    - Entry-point: Se encarga de configurar las rutas que se expondrán.
 
-Este m?dulo gradle perteneciente a la capa del dominio, implementa los casos de uso del sistema, define l?gica de aplicaci?n y reacciona a las invocaciones desde el m?dulo de entry points, orquestando los flujos hacia el m?dulo de entities.
+- ###Application
+  Es el "componente" encargado de construir el proyecto e iniciarlo.
 
-## Infrastructure
+## Clases importantes
 
-### Helpers
+- ### UseCase
+  Es importante tener claro que aqui es donde ocurre toda la orquestacion en cada
+  una de las peticiones.
 
-En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
+## Librerías y frameworks
+- Spring Webflux: Se usa para las peticiones reactivas.
+- Project-reactor : Se implementa para el uso de Mono y Flux.
+- Scaffold-clean-architecture: Se utiliza para crear el proyecto base con arquitectura limpia
 
-Estas utilidades no est?n arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos
-gen?ricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan
-basadas en el patr?n de dise?o [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006)
+## Operaciones del servicio
 
-Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
+http://localhost:8080/api/saldosymovimientos
 
-### Driven Adapters
+## Configuración
 
-Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest,
-soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos
-interactuar.
+Prerequisitos
 
-### Entry Points
+    - Java 11
+	- Gradle
+	- Request definido en el archivo SwaggerSaldosYMovimientos.yml
+    - Ejecuctar en la raiz del proyecto: ./gradlew bootRun
 
-Los entry points representan los puntos de entrada de la aplicaci?n o el inicio de los flujos de negocio.
+## Autores
+- William Molina
+- Maria Isabel Martinez
+- Leidy Graciano
+- Vanesa Castellar
+
+
+## Versionamiento
+    1.0

@@ -6,12 +6,12 @@ import co.com.ejerciciopractico.model.saldosymovimientos.gateways.MovimientosGat
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.Meta;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.MovimientosDataResponse;
-import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.Balances;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.Transaction;
+import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.Balances;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import sun.security.util.Cache;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,7 +82,13 @@ public class SaldosYMovimientosUseCase {
                             ))
                             .links(links)
                             .build()
-            );
+            ).flatMap( response -> cacheGateway.setObject(saldosYMovimientosResponse.getT2()
+                                    .getData()
+                                    .get(0)
+                                    .getRelatedTransferAccount()
+                                    .getNumber(),
+                                    response,
+                                    Duration.ofSeconds(10)));
         });
 
     }

@@ -1,17 +1,16 @@
 package co.com.ejerciciopractico.usecase.saldosymovimientos;
 
 import co.com.ejerciciopractico.model.saldosymovimientos.*;
+import co.com.ejerciciopractico.model.saldosymovimientos.gateways.CacheGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.MovimientosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.Meta;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.MovimientosDataResponse;
-import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.MovimientosResponse;
 import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.Balances;
-import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.SaldosResponse;
-import co.com.ejerciciopractico.model.saldosymovimientos.saldos.response.SaldosResponseData;
 import co.com.ejerciciopractico.model.saldosymovimientos.movimientos.response.Transaction;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import sun.security.util.Cache;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,10 +21,11 @@ public class SaldosYMovimientosUseCase {
     /* Lógica */
     private final SaldosGateway saldos;
     private  final MovimientosGateway movimientos;
+    private final CacheGateway cacheGateway;
 
     public Mono<SaldosYMovimientosResponse> getSaldosYMovimientos(SaldosYMovimientosRequest request){
 
-        return Mono.zip(saldos.getSaldos(request), movimientos.getMovimientos(request))
+        return Mono.zip(saldos.getSaldos(request), movimientos.getMovimientos(request), cacheGateway.findById("cost"))
                 .flatMap(saldosYMovimientosResponse -> {
 
             Balances dataBalances = saldosYMovimientosResponse.getT1().getData().get(0).getAccount().getBalances();
@@ -36,6 +36,7 @@ public class SaldosYMovimientosUseCase {
 
             return Mono.just(
                     SaldosYMovimientosResponse.builder()
+                            .cost(saldosYMovimientosResponse.getT3())
                             .meta(Meta.builder()
                                     ._responseSize(meta.get_responseSize())
                                     ._flagMoreRecords(meta.get_flagMoreRecords())

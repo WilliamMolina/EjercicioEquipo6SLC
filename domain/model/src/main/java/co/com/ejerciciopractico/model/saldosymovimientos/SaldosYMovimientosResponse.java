@@ -17,5 +17,6 @@ public class SaldosYMovimientosResponse {
     private Meta meta;
     private List<SaldosYMovimientosData> data;
     private Links links;
+    private String cost;
 
 }

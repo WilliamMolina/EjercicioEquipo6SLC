@@ -1,5 +1,6 @@
 package co.com.ejerciciopractico.config;
 
+import co.com.ejerciciopractico.model.saldosymovimientos.gateways.CacheGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.MovimientosGateway;
 import co.com.ejerciciopractico.model.saldosymovimientos.gateways.SaldosGateway;
 import co.com.ejerciciopractico.usecase.saldosymovimientos.SaldosYMovimientosUseCase;
@@ -36,10 +37,9 @@ public class RestConsumerConfig {
     }
 
     @Bean
-    public SaldosYMovimientosUseCase getUseCase(SaldosGateway saldos, MovimientosGateway movimientos)
+    public SaldosYMovimientosUseCase getUseCase(SaldosGateway saldos, MovimientosGateway movimientos, CacheGateway cacheGateway)
     {
-        return new SaldosYMovimientosUseCase(saldos, movimientos);
-
+        return new SaldosYMovimientosUseCase(saldos, movimientos, cacheGateway);
     }
 
 }
